@@ -4,13 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/cygdrive/c/Users/sstee/Documents/tp3_os/src/common.c" "/cygdrive/c/Users/sstee/Documents/tp3_os/cmake-build-debug/CMakeFiles/tp3_os.dir/src/common.c.o"
-  "/cygdrive/c/Users/sstee/Documents/tp3_os/src/pm.c" "/cygdrive/c/Users/sstee/Documents/tp3_os/cmake-build-debug/CMakeFiles/tp3_os.dir/src/pm.c.o"
-  "/cygdrive/c/Users/sstee/Documents/tp3_os/src/pt.c" "/cygdrive/c/Users/sstee/Documents/tp3_os/cmake-build-debug/CMakeFiles/tp3_os.dir/src/pt.c.o"
-  "/cygdrive/c/Users/sstee/Documents/tp3_os/src/tlb.c" "/cygdrive/c/Users/sstee/Documents/tp3_os/cmake-build-debug/CMakeFiles/tp3_os.dir/src/tlb.c.o"
-  "/cygdrive/c/Users/sstee/Documents/tp3_os/src/vmm.c" "/cygdrive/c/Users/sstee/Documents/tp3_os/cmake-build-debug/CMakeFiles/tp3_os.dir/src/vmm.c.o"
+  "/Users/eduardvoiculescu/Documents/tp3_os/src/common.c" "/Users/eduardvoiculescu/Documents/tp3_os/cmake-build-debug/CMakeFiles/tp3_os.dir/src/common.c.o"
+  "/Users/eduardvoiculescu/Documents/tp3_os/src/pm.c" "/Users/eduardvoiculescu/Documents/tp3_os/cmake-build-debug/CMakeFiles/tp3_os.dir/src/pm.c.o"
+  "/Users/eduardvoiculescu/Documents/tp3_os/src/pt.c" "/Users/eduardvoiculescu/Documents/tp3_os/cmake-build-debug/CMakeFiles/tp3_os.dir/src/pt.c.o"
+  "/Users/eduardvoiculescu/Documents/tp3_os/src/tlb.c" "/Users/eduardvoiculescu/Documents/tp3_os/cmake-build-debug/CMakeFiles/tp3_os.dir/src/tlb.c.o"
+  "/Users/eduardvoiculescu/Documents/tp3_os/src/vmm.c" "/Users/eduardvoiculescu/Documents/tp3_os/cmake-build-debug/CMakeFiles/tp3_os.dir/src/vmm.c.o"
   )
-set(CMAKE_C_COMPILER_ID "GNU")
+set(CMAKE_C_COMPILER_ID "AppleClang")
 
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
