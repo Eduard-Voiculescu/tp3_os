@@ -24,28 +24,96 @@ void pm_init (FILE *backing_store, FILE *log)
 // Charge la page demandée du backing store
 void pm_download_page (unsigned int page_number, unsigned int frame_number)
 {
-  download_count++;
-  /* ¡ TODO: COMPLÉTER ! */
+
+    /*
+     * Here we use memset to clear the memory location.
+     * Merci à https://www.tutorialspoint.com/c_standard_library/c_function_fread.htm
+     */
+
+    char buffer[PAGE_FRAME_SIZE + 1];
+    memset(buffer, '\0', sizeof(buffer));
+
+    /* We have to use fseek and fread. */
+
+    if (fseek(pm_backing_store, page_number * PAGE_FRAME_SIZE, SEEK_SET) != 0) {
+        perror("Failed to set the file position of the stream to the given offset");
+        return;
+    }
+
+    /* Here if fseek is successful we can read. */
+    if (fread(buffer, PAGE_FRAME_SIZE, 1, pm_backing_store) != 1){
+        perror("Failed to read data from the given stream into the array pointed to.");
+        return;
+    }
+
+    /* Copies the buffer string to the pm_memory */
+    strncpy(&pm_memory[PAGE_FRAME_SIZE * frame_number], buffer, PAGE_FRAME_SIZE);
+
+    download_count++;
+    /* ¡ TODO: COMPLÉTER ! */
 }
 
 // Sauvegarde la frame spécifiée dans la page du backing store
 void pm_backup_page (unsigned int frame_number, unsigned int page_number)
 {
-  backup_count++;
+
+    char buffer[PAGE_FRAME_SIZE + 1];
+    memset(buffer, '\0', sizeof(buffer));
+    /*
+     * Cette fonction fait "exactement" ce que pm_download_page fait
+     * mais à l'inverse. (Sauf pour le fread :o)
+     */
+
+    /* We have to use fseek. */
+
+    if (fseek(pm_backing_store, page_number * PAGE_FRAME_SIZE, SEEK_SET) != 0) {
+        perror("Failed to set the file position of the stream to the given offset");
+        return;
+    }
+
+    strncpy(buffer, &pm_memory[PAGE_FRAME_SIZE * frame_number], PAGE_FRAME_SIZE);
+
+    /* On écrit buffer dans pm_backing_store */
+    fputs(buffer, pm_backing_store);
+
+    backup_count++;
   /* ¡ TODO: COMPLÉTER ! */
 }
 
 char pm_read (unsigned int physical_address)
 {
-  read_count++;
-  /* ¡ TODO: COMPLÉTER ! */
-  return '!';
+    read_count++;
+    /* Mettre le read_count dans le else ? ou le laisser ici vue que c'est une
+     * "tentative". */
+
+    /* Physical memory read -> read the address from the physical memory bloc. */
+
+    if (physical_address > PHYSICAL_MEMORY_SIZE || physical_address < 0) {
+        perror("Error -- Trying to access a physical address greater than "
+                       "the PHYSICAL_MEMORY_SIZE or < 0.");
+        return '!';
+    } else {
+        return pm_memory[physical_address];
+    }
+
+    /* ¡ TODO: COMPLÉTER ! */
 }
 
 void pm_write (unsigned int physical_address, char c)
 {
-  write_count++;
-  /* ¡ TODO: COMPLÉTER ! */
+    write_count++;
+    /* Mettre le write_count dans le else ? ou le laisser ici vue que c'est une
+     * "tentative". */
+
+    if (physical_address > PHYSICAL_MEMORY_SIZE || physical_address < 0) {
+        perror("Error -- Trying to write to a physical address greater than "
+                       "the PHYSICAL_MEMORY_SIZE or < 0.");
+        return;
+    } else {
+        pm_memory[physical_address] = c;
+    }
+
+    /* ¡ TODO: COMPLÉTER ! */
 }
 
 
