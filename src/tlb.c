@@ -34,8 +34,21 @@ void tlb_init (FILE *log)
  * Renvoie le `frame_number`, si trouvé, ou un nombre négatif sinon.  */
 static int tlb__lookup (unsigned int page_number, bool write)
 {
-  // TODO: COMPLÉTER CETTE FONCTION.
+  for(int i = 0; i < TLB_NUM_ENTRIES; i++){
+    if(tlb_entries[i].page_number == page_number){
+      tlb_hit_count++;
+      return tlb_entries[i].frame_number;
+    }
+  }
+  tlb_miss_count++;
   return -1;
+}
+
+static void fifo_tlb(){
+  for(int i = 0; i < TLB_NUM_ENTRIES; i++){
+    tlb_entries[i+1].frame_number = tlb_entries[i].frame_number;
+    tlb_entries[i+1].page_number = tlb_entries[i].page_number;
+  }
 }
 
 /* Ajoute dans le TLB une entrée qui associe `frame_number` à
@@ -43,8 +56,13 @@ static int tlb__lookup (unsigned int page_number, bool write)
 static void tlb__add_entry (unsigned int page_number,
                             unsigned int frame_number, bool readonly)
 {
-  // TODO: COMPLÉTER CETTE FONCTION.
+  fifo_tlb();
+  tlb_entries[TLB_NUM_ENTRIES-1].page_number = page_number;
+  tlb_entries[TLB_NUM_ENTRIES-1].frame_number = frame_number;
+  tlb_mod_count++;
+
 }
+
 
 /******************** ¡ NE RIEN CHANGER CI-DESSOUS !  ******************/
 
