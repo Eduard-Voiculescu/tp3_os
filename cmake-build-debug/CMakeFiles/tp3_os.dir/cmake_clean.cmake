@@ -5,7 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/tp3_os.dir/src/tlb.c.o"
   "CMakeFiles/tp3_os.dir/src/vmm.c.o"
   "tp3_os.pdb"
-  "tp3_os"
+  "tp3_os.exe"
+  "libtp3_os.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
