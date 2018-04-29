@@ -49,7 +49,7 @@ char vmm_read (unsigned int laddress)
      * le paddress nous avons fait des fonctions.
      */
     int page = laddress / PAGE_FRAME_SIZE;
-    int frame = getFrame(page, false);
+    int frame = getFrame(page, 1);
     int offset = laddress % PAGE_FRAME_SIZE;
     int paddress = getPAddress(page, frame, offset);
 
@@ -77,30 +77,64 @@ int getFrame (int page, bool write){
         frameIndex = pt_lookup(page);
         if (frameIndex == -1) { // page fault -> aller dans le backing store
 
-            /* ICI cest un page fault*/
+            /*
+             * Ici c'est une page fault. Nous devons aller le prendre du
+             * backing store, trouver un free frame, update la
+             * table des pages et le tlb.
+             * Les étapes sont les suivantes:
+             *
+             * - Trouver free frame
+             * - Sinon, remplacer une présente
+             * - Vérifier si c'est un readonly -> backing store
+             * - sinon -> from the disk
+             *
+             */
 
-        } else { // tlb miss mais page est dans le page table
+             frameIndex = pm_free_frame();
+             if(frameIndex == -1){ // pas trouvé de free frame
+
+
+
+             } else { // free frame :)
+
+                 pm_download_page(page, frameIndex);
+                 pt_set_entry(page, frameIndex);
+                 tlb_add_entry(page, frameIndex, 1);
+
+             }
+
+
+        } else { // TLB miss mais page est dans le page table
+
             /* on doit vérifier si c'est readonly ou si c'est rw */
             if(pt_readonly_p(page) && write) { // 1 -> readonly, 0 -> rw
 
-                // ici c'est veut rw
+                // ici c'est rw
                 tlb_add_entry(page, frameIndex, 0);
                 pt_set_readonly(page, 0);
 
-            } else {
+            } else { // readonly
 
                 tlb_add_entry(page, frameIndex, 1);
                 pt_set_readonly(page, 1);
 
             }
-
         }
 
-    } else { // TLB hit
-
-        tlb_add_entry(page, frameIndex, write);
         return frameIndex;
 
+    } else { // TLB hit
+        // vérifier si c'est un rw/rdonly
+
+        if(write && tlb__is_dirty(page)) {
+            // ici c'est dirty, dont faut réécrire dans le backing_store
+            frameIndex = pt_lookup(page);
+            tlb_add_entry(page, frameIndex, 0);
+            pt_set_readonly(page, 0);
+
+        } else {
+            return frameIndex;
+        }
     }
 
 }

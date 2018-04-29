@@ -63,6 +63,18 @@ static void tlb__add_entry (unsigned int page_number,
 
 }
 
+bool tlb__is_dirty(int page_number){
+
+    for (int i = 0; i < TLB_NUM_ENTRIES; i++) {
+        if (tlb_entries[i].page_number == page_number){
+            if(tlb_entries[i].readonly)
+                return true; // c'est readonly -> dirty
+        }
+    }
+    return false; // c'est rw
+
+}
+
 
 /******************** ¡ NE RIEN CHANGER CI-DESSOUS !  ******************/
 

@@ -116,6 +116,17 @@ void pm_write (unsigned int physical_address, char c)
     /* ¡ TODO: COMPLÉTER ! */
 }
 
+int pm_free_frame() {
+
+    for (int i = 0; i < NUM_FRAMES; i++) {
+        if(pm_memory[i] == '\0') { // free frame
+            return i;
+        }
+    }
+    return -1;
+
+}
+
 
 void pm_clean (void)
 {

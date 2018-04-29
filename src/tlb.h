@@ -19,4 +19,7 @@ void tlb_add_entry (unsigned int page_number,
 
 void tlb_clean (void);
 
+/* Fonction ajoutée. */
+bool tlb__is_dirty(int);
+
 #endif

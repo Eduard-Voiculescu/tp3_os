@@ -13,4 +13,7 @@ char pm_read (unsigned int physical_address);
 void pm_write (unsigned int physical_address, char);
 void pm_clean (void);
 
+/* Fonction ajoutée. */
+int pm_free_frame();
+
 #endif
