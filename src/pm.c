@@ -96,6 +96,8 @@ char pm_read (unsigned int physical_address)
         return pm_memory[physical_address];
     }
 
+
+
     /* ¡ TODO: COMPLÉTER ! */
 }
 
@@ -127,6 +129,18 @@ int pm_free_frame() {
 
 }
 
+int pm_find_frame_to_change() {
+
+    /* Faire un algo pour aller chercher un free frame to change
+     * ... random, fifo our lru ? ... */
+
+}
+
+int pm_find_associated_page(int frame) {
+    // ... fuck all sur ...
+    return pm_memory[frame];
+
+}
 
 void pm_clean (void)
 {

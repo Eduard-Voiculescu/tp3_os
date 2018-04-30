@@ -51,10 +51,12 @@ char vmm_read (unsigned int laddress)
     int page = laddress / PAGE_FRAME_SIZE;
     int frame = getFrame(page, 1);
     int offset = laddress % PAGE_FRAME_SIZE;
-    int paddress = getPAddress(page, frame, offset);
+    int paddress = frame * PAGE_FRAME_SIZE + offset;
+
+    c = pm_read(paddress);
 
     // TODO: Fournir les arguments manquants.
-    vmm_log_command (stdout, "READING", laddress, 0, 0, 0, 0, c);
+    vmm_log_command (stdout, "READING", laddress, page, frame, offset, paddress, c);
     return c;
 }
 
@@ -63,9 +65,16 @@ void vmm_write (unsigned int laddress, char c)
 {
     write_count++;
     /* ¡ TODO: COMPLÉTER ! */
+    int page = laddress / PAGE_FRAME_SIZE;
+    int frame = getFrame(page, 1);
+    int offset = laddress % PAGE_FRAME_SIZE;
+    int paddress = frame * PAGE_FRAME_SIZE + offset;
+
+    c = pm_read(paddress);
+
 
     // TODO: Fournir les arguments manquants.
-    vmm_log_command (stdout, "WRITING", laddress, 0, 0, 0, 0, c);
+    vmm_log_command (stdout, "WRITING", laddress, page, frame, offset, paddress, c);
 }
 
 int getFrame (int page, bool write){
@@ -92,7 +101,19 @@ int getFrame (int page, bool write){
 
              frameIndex = pm_free_frame();
              if(frameIndex == -1){ // pas trouvé de free frame
+                 // on a regardé dans tlb, dans pt et dans pm non plus
+                 frameIndex = pm_find_frame_to_change();
+                 // nous avons le frame maintenant allons chercher la page associé
+                 // avec ce frame
+                 int pageBackingStore = pm_find_associated_page(frameIndex);
 
+                 if(pt_readonly_p(pageBackingStore)) { // yo is dirty boi
+                     pm_backup_page(frameIndex, pageBackingStore);
+                 }
+                 pm_download_page(pageBackingStore, frameIndex);
+                 pt_unset_entry(pageBackingStore);
+                 pt_set_entry(pageBackingStore, frameIndex);
+                 tlb_add_entry(pageBackingStore, frameIndex, 1);
 
 
              } else { // free frame :)
@@ -124,10 +145,10 @@ int getFrame (int page, bool write){
         return frameIndex;
 
     } else { // TLB hit
-        // vérifier si c'est un rw/rdonly
+        // vérifier si c'est un rw ou readonly
 
         if(write && tlb__is_dirty(page)) {
-            // ici c'est dirty, dont faut réécrire dans le backing_store
+            // ici c'est dirty, donc faut réécrire dans le backing_store
             frameIndex = pt_lookup(page);
             tlb_add_entry(page, frameIndex, 0);
             pt_set_readonly(page, 0);
@@ -139,9 +160,6 @@ int getFrame (int page, bool write){
 
 }
 
-int getPAddress(int page, int frame, int index){
-
-}
 
 // NE PAS MODIFIER CETTE FONCTION
 void vmm_clean (void)

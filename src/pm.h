@@ -15,5 +15,7 @@ void pm_clean (void);
 
 /* Fonction ajoutée. */
 int pm_free_frame();
+int pm_find_frame_to_change();
+int pm_find_associated_page(int frame);
 
 #endif
