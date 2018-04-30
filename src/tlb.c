@@ -46,6 +46,7 @@ static void fifo_tlb(){
   for(int i = 0; i < TLB_NUM_ENTRIES-1; i++){
     tlb_entries[i].frame_number = tlb_entries[i+1].frame_number;
     tlb_entries[i].page_number = tlb_entries[i+1].page_number;
+      tlb_entries[i].readonly = tlb_entries[i+1].readonly;
   }
 }
 
@@ -57,6 +58,7 @@ static void tlb__add_entry (unsigned int page_number,
   fifo_tlb();
   tlb_entries[TLB_NUM_ENTRIES-1].page_number = page_number;
   tlb_entries[TLB_NUM_ENTRIES-1].frame_number = frame_number;
+    tlb_entries[TLB_NUM_ENTRIES-1].readonly= readonly;
 }
 
 bool tlb__is_dirty(int page_number){
