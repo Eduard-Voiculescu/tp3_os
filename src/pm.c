@@ -120,10 +120,19 @@ void pm_write (unsigned int physical_address, char c)
 
 int pm_free_frame() {
 
-    for (int i = 0; i < NUM_FRAMES; i++) {
-        if(pm_memory[i] == '\0') { // free frame
-            return i;
+    /*
+     * Puisqu'un frame est de taille 256, nous avons opté d'utiliser un compteur
+     * qui sera incrémentré lorsqu'on arrive à un '\0'. Nous voulons avoir 256
+     * '\0' pour avoir un free frame.
+     */
+    int compteur = 0;
+    for (int i = 0; i < NUM_FRAMES; i++) { // 32
+        for (int j = 0; j < PAGE_FRAME_SIZE; j++) { // 256 -> 32 * 256 = 8196
+            if(pm_memory[(i * PAGE_FRAME_SIZE) + j] == '\0')  // free frame
+                compteur++;
         }
+        if(compteur == 256)
+            return i;
     }
     return -1;
 
@@ -137,6 +146,7 @@ int pm_find_frame_to_change() {
 }
 
 int pm_find_associated_page(int frame) {
+
     // ... fuck all sur ...
     return pm_memory[frame];
 

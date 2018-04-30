@@ -111,7 +111,6 @@ int getFrame (int page, bool write){
                      pm_backup_page(frameIndex, pageBackingStore);
                  }
                  pm_download_page(pageBackingStore, frameIndex);
-                 pt_unset_entry(pageBackingStore);
                  pt_set_entry(pageBackingStore, frameIndex);
                  tlb_add_entry(pageBackingStore, frameIndex, 1);
 
