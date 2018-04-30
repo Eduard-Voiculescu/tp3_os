@@ -1,4 +1,10 @@
 \documentclass{article}
+\usepackage{indentfirst}
+\usepackage{authblk}
+\usepackage{amsfonts}            %For \leadsto
+\usepackage{amsmath}             %For \text
+\usepackage{fancybox}            %For \ovalbox
+\renewcommand\Affilfont{\itshape}
 
 \usepackage[utf8]{inputenc}
 
@@ -7,10 +13,30 @@
 
 \begin{document}
 
-\maketitle
+    \maketitle
 
-\section{Introduction}
+    \section{Introduction}
 
-Pour prouver que $P \not= NP$, il suffit de ...
+    Pour commencer, la compréhension de la donnée du TP a été beaucoup plus facile que les deux antérieurs. Après 1 tp en C par Stefan Monnier en 2035 et les 2 tp antérieurs qui furent également en C, notre connaissance du langage C n'est plus une surprise. De plus, faire le tp juste après l'examen final est assez enrichissant pour nous. Àa nous as vraiment donné une lancée d'avance comparativement aux autres tp puisque nous avons déjà fait toute l'étude.
+
+    \section{Problèmes rencontrés}
+
+    Premier problème rencontré a été la compréhension de l'utilisation des fseek et des fread. Au tout début, nous n'avions eu aucune idé comment lire le FILE pm\textunderscore backing\textunderscore store. Mais après avoir fait de nombreuses lectures sur tutorialspoint (merci!) nous compris que nous devons utiliser fseek et fread sur le FILE approprié. De plus, nous faisons un check pour voir s'il y a erreur qui se présente dans une des deux fonctions fseek et fread. \newline
+
+    Deuxième problème rencontré a été de bien comprendre la différence entre une page et une frame. En effet, nous avions vue la différence théorique lors de notre étude pour le final. Mais nous avons eu de la misère à bien appliquer cette différence dans pm.c ou même dans vmm.c pour aller chercher le frame index. Nous arretions pas de faire l'erreur de les interchanger. \newline
+
+    Troisième problème rencontré a été de comprendre les frames. Un des plus gros problèmes que nous avons eu et qui nous as vraiment retardé dans le tp à été de visualiser la différence entre une frame vide et une frame remplacé. ...
+
+    \section{Surprises}
+
+    Un des plus grosses surprises que nous avons eu a été le fait que nous avions été bloqué dans vmm.c pour un bon bout de temps. Nous n'étions pas capable de bien visualiser le TLB (avec les hit et les miss), le page table et le backing store. Dans la démo 10, nous avons vue les 6 été pour regarder dans le TLB, mais il nous semblait qu'il manquait dequoi. Nous avons dû nous résoudre aux papier et crayons. Nous avons déssiné notre propre arbre pour aller charcher le frame index. Beaucoup plus facil à comprendre lorsque tu t'arrêtes de trop penser et juste de dessioner ce que tu penses. Il se peut qu'il y aille des erreurs qui se sont infliltré dans notre arbre, mais nous avons beaucoup plus avancé que si nous n'avions rien fait. \newline
+
+    \section{Choix que vous avez dû faire}
+
+    Suite à la lecture dans le manuel par rapport aux algorithmes de TLB, nous avons opté pour un classique et un pas trop compliqué à implémentr: FIFO. \newline
+
+    \section{Options que vous avez sciemment rejetées}
+
+    \section{Sources et Liens}
 
 \end{document}
